@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Minimize } from 'lucide-react';
 import Header from './components/Header';
 import TimerDisplay from './components/TimerDisplay';
 import ControlBar from './components/ControlBar';
@@ -209,6 +210,7 @@ export default function App() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
       setIsFullscreen(true);
+      setIsSettingsOpen(false); // Close settings when entering fullscreen
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
@@ -274,20 +276,28 @@ export default function App() {
         style={{ backgroundColor: isOvertime ? '#FF453A' : theme.accentColor }}
       />
 
-      {/* Header */}
-      <Header
-        activePreset={activePreset}
-        totalTimeSeconds={totalDurationSeconds}
-        activeBellsCount={bells.filter(b => b.enabled).length}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        isFullscreen={isFullscreen}
-        onToggleFullscreen={handleToggleFullscreen}
-        countDirection={countDirection}
-        onToggleDirection={() => setCountDirection(d => d === 'down' ? 'up' : 'down')}
-      />
+      {/* Header - Hidden in Fullscreen */}
+      {!isFullscreen && (
+        <Header
+          activePreset={activePreset}
+          totalTimeSeconds={totalDurationSeconds}
+          activeBellsCount={bells.filter(b => b.enabled).length}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          isFullscreen={isFullscreen}
+          onToggleFullscreen={handleToggleFullscreen}
+          countDirection={countDirection}
+          onToggleDirection={() => setCountDirection(d => d === 'down' ? 'up' : 'down')}
+        />
+      )}
 
-      {/* Main Big Timer Display */}
-      <main className="flex-1 flex items-center justify-center pt-16 pb-24 sm:pb-28">
+      {/* Main Big Timer Display - In fullscreen, occupies the entire screen cleanly */}
+      <main
+        className={`flex-1 flex items-center justify-center transition-all duration-300 ${
+          isFullscreen ? 'p-2 sm:p-6 cursor-pointer' : 'pt-16 pb-24 sm:pb-28'
+        }`}
+        onClick={isFullscreen ? (isRunning ? handlePause : handleStart) : undefined}
+        title={isFullscreen ? (isRunning ? 'Click anywhere to Pause' : 'Click anywhere to Start') : undefined}
+      >
         <TimerDisplay
           displaySeconds={displaySeconds}
           isOvertime={isOvertime}
@@ -301,41 +311,60 @@ export default function App() {
         />
       </main>
 
-      {/* Bottom iOS Control Bar */}
-      <ControlBar
-        isRunning={isRunning}
-        onStart={handleStart}
-        onPause={handlePause}
-        onReset={handleReset}
-        isMuted={isMuted}
-        onToggleMute={handleToggleMute}
-        onQuickTestSound={handleQuickTestSound}
-      />
+      {/* Subtle Exit Fullscreen Floating Button (reveals on hover in top-right) */}
+      {isFullscreen && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleToggleFullscreen();
+          }}
+          className="fixed top-5 right-5 z-40 p-2.5 rounded-full ios-glass border border-white/10 text-white/30 hover:text-white hover:border-white/30 hover:bg-white/10 opacity-0 hover:opacity-100 transition-all duration-200"
+          title="Exit Fullscreen (F or Esc)"
+          aria-label="Exit Fullscreen"
+        >
+          <Minimize size={18} />
+        </button>
+      )}
 
-      {/* Settings Modal Sheet (Upper Right Pop-up) */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        totalMinutes={totalMinutes}
-        totalSeconds={totalSeconds}
-        onChangeTotalTime={handleChangeTotalTime}
-        bells={bells}
-        onChangeBell={handleChangeBell}
-        onToggleBell={handleToggleBell}
-        activePresetId={activePreset?.id}
-        onSelectPreset={handleSelectPreset}
-        customPresets={customPresets}
-        onSaveCustomPreset={handleSaveCustomPreset}
-        onDeleteCustomPreset={handleDeleteCustomPreset}
-        volume={volume}
-        onChangeVolume={setVolume}
-        isMuted={isMuted}
-        onToggleMute={handleToggleMute}
-        visualFlash={visualFlash}
-        onToggleVisualFlash={setVisualFlash}
-        displayMode={countDirection}
-        onChangeDisplayMode={setCountDirection}
-      />
+      {/* Bottom iOS Control Bar - Hidden in Fullscreen */}
+      {!isFullscreen && (
+        <ControlBar
+          isRunning={isRunning}
+          onStart={handleStart}
+          onPause={handlePause}
+          onReset={handleReset}
+          isMuted={isMuted}
+          onToggleMute={handleToggleMute}
+          onQuickTestSound={handleQuickTestSound}
+        />
+      )}
+
+      {/* Settings Modal Sheet (Upper Right Pop-up) - Hidden in Fullscreen */}
+      {!isFullscreen && (
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          totalMinutes={totalMinutes}
+          totalSeconds={totalSeconds}
+          onChangeTotalTime={handleChangeTotalTime}
+          bells={bells}
+          onChangeBell={handleChangeBell}
+          onToggleBell={handleToggleBell}
+          activePresetId={activePreset?.id}
+          onSelectPreset={handleSelectPreset}
+          customPresets={customPresets}
+          onSaveCustomPreset={handleSaveCustomPreset}
+          onDeleteCustomPreset={handleDeleteCustomPreset}
+          volume={volume}
+          onChangeVolume={setVolume}
+          isMuted={isMuted}
+          onToggleMute={handleToggleMute}
+          visualFlash={visualFlash}
+          onToggleVisualFlash={setVisualFlash}
+          displayMode={countDirection}
+          onChangeDisplayMode={setCountDirection}
+        />
+      )}
 
     </div>
   );
