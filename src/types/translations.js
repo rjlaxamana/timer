@@ -181,3 +181,4 @@ export const TRANSLATIONS = {
     website: '公式サイト',
   }
 };
+
