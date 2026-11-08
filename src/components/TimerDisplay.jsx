@@ -101,10 +101,10 @@ export default function TimerDisplay({
         </div>
       </div>
 
-      {/* Progress Timeline with Bell Pins and Times Directly Aligned Below */}
+      {/* Progress Timeline with Floating Bell Icons and Aligned Times */}
       <div className="w-full max-w-3xl mt-4 sm:mt-6 px-4">
-        <div className="relative w-full pb-7">
-          {/* Background track */}
+        <div className="relative w-full pt-8 pb-6">
+          {/* Background track line */}
           <div className={`h-2 sm:h-2.5 w-full rounded-full overflow-hidden ${theme.progressTrack}`}>
             <div
               className={`h-full transition-all duration-300 rounded-full ${
@@ -114,34 +114,38 @@ export default function TimerDisplay({
             />
           </div>
 
-          {/* Bell Markers & Times directly aligned under each bell symbol */}
+          {/* Floating Bell Markers & Times (Single flex column for guaranteed vertical alignment) */}
           {bells.map((bell) => {
             const bellSeconds = bell.minutes * 60 + (bell.seconds || 0);
             if (bellSeconds <= 0 || bellSeconds > totalDurationSeconds || !bell.enabled) return null;
             const markerPercent = (bellSeconds / totalDurationSeconds) * 100;
             const hasTriggered = elapsedSeconds >= bellSeconds;
             const timeString = formatTimeParts(bellSeconds).fullString;
+            const localizedName = (lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name;
 
             return (
               <div
                 key={bell.id}
-                className="absolute top-1 -translate-y-1/2 -translate-x-1/2 group z-20 flex flex-col items-center"
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group z-20 flex flex-col items-center pointer-events-none"
                 style={{ left: `${markerPercent}%` }}
               >
-                {/* Bell Icon Pin on top of the progress bar with optical centering */}
+                {/* Floating Bell Icon (Above the progress bar) */}
                 <div
-                  className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all duration-200 border-[1.5px] shadow-sm ${
+                  className={`pointer-events-auto transition-all duration-300 cursor-pointer ${
                     hasTriggered
-                      ? 'bg-amber-400 border-white text-black scale-110 shadow-[0_0_12px_#fbbf24]'
-                      : 'bg-black/90 border-current/70 text-current group-hover:scale-125'
+                      ? 'text-amber-400 scale-110 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]'
+                      : 'text-white/60 hover:text-white hover:scale-110'
                   }`}
-                  title={`${(lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name}: ${timeString} (${bell.rings} ${bell.rings === 1 ? t.chime : t.chimes})`}
+                  title={`${localizedName}: ${timeString} (${bell.rings} ${bell.rings === 1 ? t.chime : t.chimes})`}
                 >
-                  <Bell size={11} className="opacity-95 translate-y-[0.75px]" />
+                  <Bell size={16} className={hasTriggered ? 'fill-amber-400/20' : 'fill-white/10'} />
                 </div>
 
-                {/* Time directly under the progress bar aligned with the bell symbol */}
-                <div className="mt-2.5 whitespace-nowrap select-none pointer-events-none">
+                {/* Vertical spacer across the track line */}
+                <div className="h-2.5 sm:h-3 w-0 my-1 pointer-events-none" />
+
+                {/* Aligned Time (Directly below the progress bar on exact same vertical axis) */}
+                <div className="whitespace-nowrap select-none pointer-events-none">
                   <span
                     className={`text-[11px] sm:text-xs font-semibold tracking-tight transition-colors ${
                       hasTriggered ? 'text-amber-400 font-bold' : 'opacity-70'
@@ -154,8 +158,8 @@ export default function TimerDisplay({
             );
           })}
 
-          {/* Track 00:00 at start and total duration at end (if not occupied by a bell) */}
-          <div className="absolute top-4 left-0 right-0 flex justify-between items-center text-[11px] sm:text-xs opacity-50 font-medium select-none pointer-events-none">
+          {/* Track 00:00 at start and total duration at end */}
+          <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center text-[11px] sm:text-xs opacity-50 font-medium select-none pointer-events-none">
             <span>00:00</span>
             {!hasBellAtEnd && (
               <span>{formatTimeParts(totalDurationSeconds).fullString}</span>
