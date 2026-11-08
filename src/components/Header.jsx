@@ -42,7 +42,7 @@ export default function Header({
           className={`hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ios-glass border ${theme.badgeClass} hover:opacity-90 active:scale-95`}
           title={t.switchModeTooltip}
         >
-          <span>{countDirection === 'down' ? `⏱️ ${t.countDown}` : `⏳ ${t.countUp}`}</span>
+          <span>{countDirection === 'down' ? `⏳ ${t.countDown}` : `⏱️ ${t.countUp}`}</span>
         </button>
       </div>
 
