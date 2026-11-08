@@ -128,16 +128,16 @@ export default function TimerDisplay({
                 className="absolute top-1 -translate-y-1/2 -translate-x-1/2 group z-20 flex flex-col items-center"
                 style={{ left: `${markerPercent}%` }}
               >
-                {/* Bell Icon Pin on top of the progress bar */}
+                {/* Bell Icon Pin on top of the progress bar with optical centering */}
                 <div
-                  className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center transition-all duration-200 border-2 shadow-sm ${
+                  className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all duration-200 border-[1.5px] shadow-sm ${
                     hasTriggered
                       ? 'bg-amber-400 border-white text-black scale-110 shadow-[0_0_12px_#fbbf24]'
                       : 'bg-black/90 border-current/70 text-current group-hover:scale-125'
                   }`}
                   title={`${(lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name}: ${timeString} (${bell.rings} ${bell.rings === 1 ? t.chime : t.chimes})`}
                 >
-                  <Bell size={9} className="opacity-95" />
+                  <Bell size={11} className="opacity-95 translate-y-[0.75px]" />
                 </div>
 
                 {/* Time directly under the progress bar aligned with the bell symbol */}
