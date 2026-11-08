@@ -283,7 +283,7 @@ export default function App() {
   };
 
   return (
-    <div className={`relative w-screen h-screen flex flex-col justify-between overflow-hidden transition-colors duration-500 font-sans ${theme.bgClass}`}>
+    <div className={`relative w-full h-full min-h-screen min-h-[100dvh] flex flex-col justify-between overflow-hidden transition-colors duration-500 font-sans ${theme.bgClass}`}>
       
       {/* Visual Flash Overlay */}
       {isFlashing && (
