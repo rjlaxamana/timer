@@ -58,13 +58,14 @@ export default function TimerDisplay({
         )}
       </div>
 
-      {/* Main Massive Digital Readout with Sparsed Digits */}
+      {/* Main Massive Digital Readout with Balanced Spacing */}
       <div className="relative flex items-center justify-center w-full my-2 sm:my-3 select-none">
         <div
-          className="flex items-center justify-center font-timer font-bold tracking-widest transition-all duration-300"
+          className="flex items-center justify-center font-timer font-bold select-none transition-all duration-300"
           style={{
             fontSize: 'clamp(6.5rem, 26vw, 23rem)',
             lineHeight: 0.9,
+            letterSpacing: '0.015em',
             color: isOvertime ? '#FF453A' : theme.timerColor,
             filter: isOvertime
               ? 'drop-shadow(0 0 25px rgba(255, 69, 58, 0.6)) drop-shadow(0 0 60px rgba(255, 69, 58, 0.3))'
@@ -73,25 +74,23 @@ export default function TimerDisplay({
         >
           {/* Overtime indicator prefix */}
           {isOvertime && (
-            <span className="text-red-500 mr-2 sm:mr-4 font-normal opacity-90 select-none">
+            <span className="text-red-500 mr-2 sm:mr-3 font-normal opacity-90 select-none">
               +
             </span>
           )}
 
-          {/* Sparsed Digit 1 */}
-          <span className="inline-block text-center mx-[0.04em] tnum">{m1}</span>
-          {/* Sparsed Digit 2 */}
-          <span className="inline-block text-center mx-[0.04em] tnum">{m2}</span>
+          {/* Minutes */}
+          <span className="tnum inline-block text-center">{m1}</span>
+          <span className="tnum inline-block text-center">{m2}</span>
 
-          {/* Colon Separator with ample breathing room */}
-          <span className="inline-block mx-[0.12em] opacity-80 pb-[0.08em] select-none">
+          {/* Colon Separator - clean and balanced */}
+          <span className="opacity-75 mx-[0.03em] pb-[0.04em] select-none">
             :
           </span>
 
-          {/* Sparsed Digit 3 */}
-          <span className="inline-block text-center mx-[0.04em] tnum">{s1}</span>
-          {/* Sparsed Digit 4 */}
-          <span className="inline-block text-center mx-[0.04em] tnum">{s2}</span>
+          {/* Seconds */}
+          <span className="tnum inline-block text-center">{s1}</span>
+          <span className="tnum inline-block text-center">{s2}</span>
         </div>
       </div>
 
