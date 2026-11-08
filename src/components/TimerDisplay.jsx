@@ -134,7 +134,7 @@ export default function TimerDisplay({
                 </div>
 
                 {/* Marker Tooltip label */}
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap px-2.5 py-1 rounded-lg text-[10px] font-mono bg-black/95 text-white border border-white/20 backdrop-blur">
+                <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap px-2.5 py-1 rounded-lg text-[10px] font-medium bg-black/95 text-white border border-white/20 backdrop-blur">
                   {bell.name} ({bell.minutes}m)
                 </div>
               </div>
@@ -143,7 +143,7 @@ export default function TimerDisplay({
         </div>
 
         {/* Milestone Labels below timeline */}
-        <div className="flex justify-between items-center mt-3 text-xs opacity-75 font-mono">
+        <div className="flex justify-between items-center mt-3 text-xs opacity-75 font-medium">
           <span>00:00</span>
           <div className="flex gap-4 sm:gap-6">
             {bells.filter(b => b.enabled).map(b => (

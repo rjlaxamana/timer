@@ -18,18 +18,8 @@ export default {
           'Arial',
           'sans-serif'
         ],
-        mono: [
-          '"JetBrains Mono"',
-          '"Space Mono"',
-          '"SF Mono"',
-          'Menlo',
-          'Monaco',
-          'Consolas',
-          'monospace'
-        ],
         timer: [
           '"JetBrains Mono"',
-          '"Space Mono"',
           'monospace'
         ]
       },

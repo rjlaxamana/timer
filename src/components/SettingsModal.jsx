@@ -143,7 +143,7 @@ export default function SettingsModal({
                   <div className="flex-1">
                     <div className="flex items-center justify-between text-xs opacity-70 mb-1">
                       <span>Minutes</span>
-                      <span className="font-mono font-bold text-sm">{totalMinutes}m</span>
+                      <span className="font-semibold text-sm">{totalMinutes}m</span>
                     </div>
                     <input
                       type="range"
@@ -157,7 +157,7 @@ export default function SettingsModal({
                   <div className="w-24">
                     <div className="flex items-center justify-between text-xs opacity-70 mb-1">
                       <span>Seconds</span>
-                      <span className="font-mono font-bold text-sm">{totalSeconds}s</span>
+                      <span className="font-semibold text-sm">{totalSeconds}s</span>
                     </div>
                     <input
                       type="number"
@@ -166,7 +166,7 @@ export default function SettingsModal({
                       step="5"
                       value={totalSeconds}
                       onChange={(e) => onChangeTotalTime(totalMinutes, Math.min(59, Math.max(0, Number(e.target.value))))}
-                      className="w-full p-2 text-center rounded-xl bg-current/10 border border-current/15 font-mono text-sm focus:outline-none"
+                      className="w-full p-2 text-center rounded-xl bg-current/10 border border-current/15 font-medium text-sm focus:outline-none"
                     />
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export default function SettingsModal({
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2.5">
-                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-current/10 text-xs font-bold font-mono">
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-current/10 text-xs font-bold">
                           {bell.id}
                         </span>
                         <div>
@@ -243,7 +243,7 @@ export default function SettingsModal({
                             max={totalMinutes}
                             value={bell.minutes}
                             onChange={(e) => onChangeBell(bell.id, { minutes: Number(e.target.value) })}
-                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-mono text-center focus:outline-none"
+                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
                           />
                         </div>
                         <div>
@@ -255,7 +255,7 @@ export default function SettingsModal({
                             step="5"
                             value={bell.seconds || 0}
                             onChange={(e) => onChangeBell(bell.id, { seconds: Number(e.target.value) })}
-                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-mono text-center focus:outline-none"
+                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
                           />
                         </div>
                       </div>
@@ -301,7 +301,7 @@ export default function SettingsModal({
                           <p className="text-xs opacity-60 mt-0.5">{preset.description}</p>
                         </div>
                         <div className="text-right">
-                          <span className="font-mono font-bold text-sm opacity-90">{preset.totalMinutes}m</span>
+                          <span className="font-semibold text-sm opacity-90">{preset.totalMinutes}m</span>
                         </div>
                       </button>
                     );
@@ -472,7 +472,7 @@ export default function SettingsModal({
                       <Volume2 size={16} />
                       <span>Chime Volume</span>
                     </span>
-                    <span className="font-mono font-bold">{Math.round(volume * 100)}%</span>
+                    <span className="font-semibold text-xs opacity-90">{Math.round(volume * 100)}%</span>
                   </div>
                   <input
                     type="range"
