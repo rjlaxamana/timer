@@ -5,18 +5,14 @@ import {
   Clock,
   Palette,
   Volume2,
-  VolumeX,
   Play,
   Check,
   Plus,
   Trash2,
-  Save,
-  RotateCcw,
-  Sparkles,
   ExternalLink
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import { DEFAULT_PRESETS, AVAILABLE_SOUNDS } from '../types/presets';
+import { DEFAULT_PRESETS } from '../types/presets';
 import { soundPlayer } from '../audio/soundPlayer';
 
 export default function SettingsModal({
@@ -41,6 +37,8 @@ export default function SettingsModal({
   onToggleVisualFlash,
   displayMode,
   onChangeDisplayMode,
+  t,
+  lang
 }) {
   const { theme, currentThemeId, setThemeId, allThemes } = useTheme();
   const [activeTab, setActiveTab] = useState('bells'); // 'bells' | 'presets' | 'appearance'
@@ -74,8 +72,8 @@ export default function SettingsModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-current/10">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Timer Settings</h2>
-            <p className="text-xs opacity-60">Presentation bell markers, presets & themes</p>
+            <h2 className="text-xl font-bold tracking-tight">{t.settingsTitle}</h2>
+            <p className="text-xs opacity-60">{t.settingsSubtitle}</p>
           </div>
           <button
             onClick={onClose}
@@ -98,7 +96,7 @@ export default function SettingsModal({
               }`}
             >
               <Bell size={14} />
-              <span>Bells & Time</span>
+              <span>{t.tabBells}</span>
             </button>
 
             <button
@@ -110,7 +108,7 @@ export default function SettingsModal({
               }`}
             >
               <Clock size={14} />
-              <span>Presets</span>
+              <span>{t.tabPresets}</span>
             </button>
 
             <button
@@ -122,7 +120,7 @@ export default function SettingsModal({
               }`}
             >
               <Palette size={14} />
-              <span>Theme & Audio</span>
+              <span>{t.tabAppearance}</span>
             </button>
           </div>
         </div>
@@ -137,13 +135,13 @@ export default function SettingsModal({
               {/* Total Duration Block */}
               <div className="p-4 rounded-2xl bg-current/5 border border-current/10">
                 <label className="text-xs font-semibold uppercase tracking-wider opacity-70 block mb-2">
-                  Total Presentation Duration
+                  {t.totalDuration}
                 </label>
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
                     <div className="flex items-center justify-between text-xs opacity-70 mb-1">
-                      <span>Minutes</span>
-                      <span className="font-semibold text-sm">{totalMinutes}m</span>
+                      <span>{t.minutes}</span>
+                      <span className="font-semibold text-sm">{totalMinutes}{lang === 'ja' ? '分' : 'm'}</span>
                     </div>
                     <input
                       type="range"
@@ -156,8 +154,8 @@ export default function SettingsModal({
                   </div>
                   <div className="w-24">
                     <div className="flex items-center justify-between text-xs opacity-70 mb-1">
-                      <span>Seconds</span>
-                      <span className="font-semibold text-sm">{totalSeconds}s</span>
+                      <span>{t.seconds}</span>
+                      <span className="font-semibold text-sm">{totalSeconds}{lang === 'ja' ? '秒' : 's'}</span>
                     </div>
                     <input
                       type="number"
@@ -176,92 +174,95 @@ export default function SettingsModal({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-semibold uppercase tracking-wider opacity-70">
-                    Presentation Bell Chimes (Max 3)
+                    {t.bellChimesHeading}
                   </h3>
-                  <span className="text-[11px] opacity-60">Sourced from OtoLogic</span>
+                  <span className="text-[11px] opacity-60">{t.sourcedFromOtoLogic}</span>
                 </div>
 
-                {bells.map((bell) => (
-                  <div
-                    key={bell.id}
-                    className={`p-4 rounded-2xl border transition-all duration-200 ${
-                      bell.enabled
-                        ? 'bg-current/5 border-current/15'
-                        : 'bg-current/[0.02] border-current/5 opacity-50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-current/10 text-xs font-bold">
-                          {bell.id}
-                        </span>
-                        <div>
-                          <div className="font-semibold text-sm flex items-center gap-2">
-                            <span>{bell.name}</span>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-current/10 font-normal">
-                              {bell.rings} {bell.rings === 1 ? 'Chime' : 'Chimes'}
-                            </span>
+                {bells.map((bell) => {
+                  const localizedName = (lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name;
+                  return (
+                    <div
+                      key={bell.id}
+                      className={`p-4 rounded-2xl border transition-all duration-200 ${
+                        bell.enabled
+                          ? 'bg-current/5 border-current/15'
+                          : 'bg-current/[0.02] border-current/5 opacity-50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2.5">
+                          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-current/10 text-xs font-bold">
+                            {bell.id}
+                          </span>
+                          <div>
+                            <div className="font-semibold text-sm flex items-center gap-2">
+                              <span>{localizedName}</span>
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-current/10 font-normal">
+                                {bell.rings} {bell.rings === 1 ? t.chime : t.chimes}
+                              </span>
+                            </div>
+                            <div className="text-[11px] opacity-60">
+                              {t.playsAt} {bell.minutes}{lang === 'ja' ? '分' : 'm'} {bell.seconds ? `${bell.seconds}${lang === 'ja' ? '秒' : 's'}` : ''}
+                            </div>
                           </div>
-                          <div className="text-[11px] opacity-60">
-                            Plays at {bell.minutes}m {bell.seconds ? `${bell.seconds}s` : ''}
-                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {/* Test Bell Audio Button */}
+                          <button
+                            onClick={() => handleTestBell(bell)}
+                            className="p-2 rounded-xl bg-current/10 hover:bg-current/15 text-xs font-medium flex items-center gap-1 active:scale-95 transition-all"
+                            title={t.test}
+                          >
+                            <Play size={12} fill="currentColor" />
+                            <span className="text-[11px]">{t.test}</span>
+                          </button>
+
+                          {/* iOS Switch Toggle */}
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={bell.enabled}
+                              onChange={(e) => onToggleBell(bell.id, e.target.checked)}
+                              className="sr-only peer"
+                            />
+                            <div className="w-11 h-6 bg-current/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#30D158]" />
+                          </label>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        {/* Test Bell Audio Button */}
-                        <button
-                          onClick={() => handleTestBell(bell)}
-                          className="p-2 rounded-xl bg-current/10 hover:bg-current/15 text-xs font-medium flex items-center gap-1 active:scale-95 transition-all"
-                          title="Preview sound chime"
-                        >
-                          <Play size={12} fill="currentColor" />
-                          <span className="text-[11px]">Test</span>
-                        </button>
-
-                        {/* iOS Switch Toggle */}
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={bell.enabled}
-                            onChange={(e) => onToggleBell(bell.id, e.target.checked)}
-                            className="sr-only peer"
-                          />
-                          <div className="w-11 h-6 bg-current/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#30D158]" />
-                        </label>
-                      </div>
+                      {/* Minute / Second Sliders & Pickers */}
+                      {bell.enabled && (
+                        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-current/10 text-xs">
+                          <div>
+                            <label className="block text-[11px] opacity-70 mb-1">{t.triggerMinute}</label>
+                            <input
+                              type="number"
+                              min="0"
+                              max={totalMinutes}
+                              value={bell.minutes}
+                              onChange={(e) => onChangeBell(bell.id, { minutes: Number(e.target.value) })}
+                              className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] opacity-70 mb-1">{t.triggerSecond}</label>
+                            <input
+                              type="number"
+                              min="0"
+                              max="59"
+                              step="5"
+                              value={bell.seconds || 0}
+                              onChange={(e) => onChangeBell(bell.id, { seconds: Number(e.target.value) })}
+                              className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
-
-                    {/* Minute / Second Sliders & Pickers */}
-                    {bell.enabled && (
-                      <div className="grid grid-cols-2 gap-3 pt-2 border-t border-current/10 text-xs">
-                        <div>
-                          <label className="block text-[11px] opacity-70 mb-1">Trigger Minute</label>
-                          <input
-                            type="number"
-                            min="0"
-                            max={totalMinutes}
-                            value={bell.minutes}
-                            onChange={(e) => onChangeBell(bell.id, { minutes: Number(e.target.value) })}
-                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] opacity-70 mb-1">Trigger Second</label>
-                          <input
-                            type="number"
-                            min="0"
-                            max="59"
-                            step="5"
-                            value={bell.seconds || 0}
-                            onChange={(e) => onChangeBell(bell.id, { seconds: Number(e.target.value) })}
-                            className="w-full p-2 rounded-xl bg-current/10 border border-current/15 font-medium text-center focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
             </div>
@@ -274,11 +275,14 @@ export default function SettingsModal({
               {/* Built-in Presets */}
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold uppercase tracking-wider opacity-70 mb-2">
-                  Standard Presentation Presets
+                  {t.standardPresets}
                 </h3>
                 <div className="grid gap-2">
                   {DEFAULT_PRESETS.map((preset) => {
                     const isSelected = activePresetId === preset.id;
+                    const presetName = (lang === 'ja' && preset.nameJa) ? preset.nameJa : preset.name;
+                    const presetDesc = (lang === 'ja' && preset.descriptionJa) ? preset.descriptionJa : preset.description;
+
                     return (
                       <button
                         key={preset.id}
@@ -291,17 +295,17 @@ export default function SettingsModal({
                       >
                         <div>
                           <div className="font-semibold text-sm flex items-center gap-2">
-                            <span>{preset.name}</span>
+                            <span>{presetName}</span>
                             {isSelected && (
                               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#30D158] text-black font-bold">
-                                Active
+                                {t.activeBadge}
                               </span>
                             )}
                           </div>
-                          <p className="text-xs opacity-60 mt-0.5">{preset.description}</p>
+                          <p className="text-xs opacity-60 mt-0.5">{presetDesc}</p>
                         </div>
                         <div className="text-right">
-                          <span className="font-semibold text-sm opacity-90">{preset.totalMinutes}m</span>
+                          <span className="font-semibold text-sm opacity-90">{preset.totalMinutes}{lang === 'ja' ? '分' : 'm'}</span>
                         </div>
                       </button>
                     );
@@ -313,7 +317,7 @@ export default function SettingsModal({
               <div className="pt-2 border-t border-current/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-semibold uppercase tracking-wider opacity-70">
-                    Custom Presets ({customPresets.length})
+                    {t.customPresets} ({customPresets.length})
                   </h3>
                   {!isSavingPreset && (
                     <button
@@ -321,7 +325,7 @@ export default function SettingsModal({
                       className="text-xs flex items-center gap-1 font-semibold text-[#0A84FF] hover:underline"
                     >
                       <Plus size={14} />
-                      <span>Save Current Settings</span>
+                      <span>{t.saveCurrentSettings}</span>
                     </button>
                   )}
                 </div>
@@ -329,11 +333,11 @@ export default function SettingsModal({
                 {/* Save Current Preset Form */}
                 {isSavingPreset && (
                   <form onSubmit={handleSavePreset} className="p-3 rounded-2xl bg-current/5 border border-current/10 space-y-2">
-                    <label className="block text-xs font-medium">Preset Name</label>
+                    <label className="block text-xs font-medium">{t.presetName}</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
-                        placeholder="e.g. My Final Thesis"
+                        placeholder={t.presetNamePlaceholder}
                         value={newPresetName}
                         onChange={(e) => setNewPresetName(e.target.value)}
                         className="flex-1 p-2 rounded-xl bg-current/10 border border-current/15 text-sm focus:outline-none"
@@ -343,14 +347,14 @@ export default function SettingsModal({
                         type="submit"
                         className="px-4 py-2 rounded-xl bg-[#30D158] text-black font-semibold text-xs active:scale-95"
                       >
-                        Save
+                        {t.save}
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsSavingPreset(false)}
                         className="p-2 rounded-xl bg-current/10 text-xs"
                       >
-                        Cancel
+                        {t.cancel}
                       </button>
                     </div>
                   </form>
@@ -359,7 +363,7 @@ export default function SettingsModal({
                 {/* Custom Presets List */}
                 {customPresets.length === 0 ? (
                   <div className="text-center py-4 text-xs opacity-50 italic">
-                    No custom presets saved yet. Customize your bells and click "Save Current Settings".
+                    {t.noCustomPresets}
                   </div>
                 ) : (
                   <div className="grid gap-2">
@@ -382,12 +386,12 @@ export default function SettingsModal({
                               <span>{preset.name}</span>
                               {isSelected && (
                                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#30D158] text-black font-bold">
-                                  Active
+                                  {t.activeBadge}
                                 </span>
                               )}
                             </div>
                             <p className="text-xs opacity-60 mt-0.5">
-                              {preset.totalMinutes}m • {preset.bells.filter(b => b.enabled).length} bells
+                              {preset.totalMinutes}{lang === 'ja' ? '分' : 'm'} • {preset.bells.filter(b => b.enabled).length} {t.bellsCount}
                             </p>
                           </div>
                           <button
@@ -415,33 +419,33 @@ export default function SettingsModal({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs font-semibold uppercase tracking-wider opacity-70">
-                    Color Schemes (5 Curated)
+                    {t.colorSchemesHeading}
                   </h3>
-                  <span className="text-[11px] opacity-60">Dark & Light Modes</span>
+                  <span className="text-[11px] opacity-60">{t.darkAndLightModes}</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {allThemes.map((t) => {
-                    const isSelected = currentThemeId === t.id;
+                  {allThemes.map((tItem) => {
+                    const isSelected = currentThemeId === tItem.id;
                     return (
                       <button
-                        key={t.id}
-                        onClick={() => setThemeId(t.id)}
+                        key={tItem.id}
+                        onClick={() => setThemeId(tItem.id)}
                         className={`p-3.5 rounded-2xl border transition-all duration-200 flex items-center justify-between text-left ${
                           isSelected
                             ? 'bg-current/10 shadow-sm scale-[1.02]'
                             : 'border-current/10 bg-current/5 hover:bg-current/10'
                         }`}
-                        style={{ borderColor: isSelected ? t.accentColor : undefined }}
+                        style={{ borderColor: isSelected ? tItem.accentColor : undefined }}
                       >
                         <div className="flex items-center gap-3">
                           <span
                             className="w-5 h-5 rounded-full border border-white/20 shadow-sm"
-                            style={{ backgroundColor: t.accentColor }}
+                            style={{ backgroundColor: tItem.accentColor }}
                           />
                           <div>
-                            <div className="font-semibold text-xs sm:text-sm">{t.name}</div>
-                            <div className="text-[10px] opacity-60">{t.type} Mode</div>
+                            <div className="font-semibold text-xs sm:text-sm">{tItem.name}</div>
+                            <div className="text-[10px] opacity-60">{tItem.type} Mode</div>
                           </div>
                         </div>
 
@@ -449,8 +453,8 @@ export default function SettingsModal({
                           <div
                             className="w-5 h-5 rounded-full flex items-center justify-center shadow-sm"
                             style={{
-                              backgroundColor: t.accentColor,
-                              color: (t.id === 'neon-pink' || t.id === 'ios-dark' || t.id === 'ios-light') ? '#ffffff' : '#000000'
+                              backgroundColor: tItem.accentColor,
+                              color: (tItem.id === 'neon-pink' || tItem.id === 'ios-dark' || tItem.id === 'ios-light') ? '#ffffff' : '#000000'
                             }}
                           >
                             <Check size={12} strokeWidth={3} />
@@ -465,7 +469,7 @@ export default function SettingsModal({
               {/* Sound Settings */}
               <div className="pt-4 border-t border-current/10 space-y-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wider opacity-70">
-                  Audio & Visual Feedback
+                  {t.audioFeedbackHeading}
                 </h3>
 
                 {/* Volume Slider */}
@@ -473,7 +477,7 @@ export default function SettingsModal({
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-medium flex items-center gap-1.5">
                       <Volume2 size={16} />
-                      <span>Chime Volume</span>
+                      <span>{t.chimeVolume}</span>
                     </span>
                     <span className="font-semibold text-xs opacity-90">{Math.round(volume * 100)}%</span>
                   </div>
@@ -491,8 +495,8 @@ export default function SettingsModal({
                 {/* Visual Flash Alert Toggle */}
                 <div className="p-4 rounded-2xl bg-current/5 border border-current/10 flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-xs sm:text-sm">Screen Flash on Bell</div>
-                    <div className="text-[11px] opacity-60">Subtly flash the screen when a bell rings</div>
+                    <div className="font-medium text-xs sm:text-sm">{t.screenFlash}</div>
+                    <div className="text-[11px] opacity-60">{t.screenFlashDesc}</div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
@@ -507,14 +511,14 @@ export default function SettingsModal({
 
                 {/* OtoLogic Attribution Badge */}
                 <div className="p-3 rounded-xl bg-current/[0.03] border border-current/5 text-[11px] opacity-70 flex items-center justify-between">
-                  <span>Sound effects provided by <strong>OtoLogic</strong> (CC BY 4.0)</span>
+                  <span>{t.soundAttribution} <strong>OtoLogic</strong> (CC BY 4.0)</span>
                   <a
                     href="https://otologic.jp/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#0A84FF] hover:underline flex items-center gap-0.5 ml-2"
                   >
-                    <span>Website</span>
+                    <span>{t.website}</span>
                     <ExternalLink size={10} />
                   </a>
                 </div>
@@ -532,7 +536,7 @@ export default function SettingsModal({
             onClick={onClose}
             className={`w-full sm:w-auto px-6 py-2.5 rounded-2xl font-semibold text-xs sm:text-sm transition-all duration-150 ${theme.accentClass} active:scale-95 shadow-md`}
           >
-            Done
+            {t.done}
           </button>
         </div>
 
@@ -540,4 +544,3 @@ export default function SettingsModal({
     </div>
   );
 }
-

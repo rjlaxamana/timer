@@ -6,10 +6,30 @@ import ControlBar from './components/ControlBar';
 import SettingsModal from './components/SettingsModal';
 import { useTheme } from './context/ThemeContext';
 import { DEFAULT_PRESETS, STORAGE_KEYS } from './types/presets';
+import { TRANSLATIONS } from './types/translations';
 import { soundPlayer } from './audio/soundPlayer';
 
 export default function App() {
   const { theme } = useTheme();
+
+  // Language state ('en' | 'ja')
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.LANG) || 'en';
+    } catch {
+      return 'en';
+    }
+  });
+
+  const handleToggleLang = () => {
+    const nextLang = lang === 'en' ? 'ja' : 'en';
+    setLang(nextLang);
+    try {
+      localStorage.setItem(STORAGE_KEYS.LANG, nextLang);
+    } catch {}
+  };
+
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   // Presets & Active Config
   const [customPresets, setCustomPresets] = useState(() => {
@@ -254,12 +274,12 @@ export default function App() {
 
   // Current Phase Status Text
   const getCurrentPhaseText = () => {
-    if (isOvertime) return 'Overtime';
+    if (isOvertime) return t.overtime;
     const triggeredCount = triggeredBellsRef.current.size;
-    if (triggeredCount === 0) return isRunning ? 'In Progress' : 'Ready';
-    if (triggeredCount === 1) return 'Bell 1 (Warning)';
-    if (triggeredCount === 2) return 'Bell 2 (Talk Finished)';
-    return 'Bell 3 (Session Finished)';
+    if (triggeredCount === 0) return isRunning ? t.inProgress : t.ready;
+    if (triggeredCount === 1) return t.bell1Triggered;
+    if (triggeredCount === 2) return t.bell2Triggered;
+    return t.bell3Triggered;
   };
 
   return (
@@ -287,6 +307,9 @@ export default function App() {
           onToggleFullscreen={handleToggleFullscreen}
           countDirection={countDirection}
           onToggleDirection={() => setCountDirection(d => d === 'down' ? 'up' : 'down')}
+          lang={lang}
+          onToggleLang={handleToggleLang}
+          t={t}
         />
       )}
 
@@ -296,7 +319,7 @@ export default function App() {
           isFullscreen ? 'p-2 sm:p-6 cursor-pointer' : 'pt-16 pb-24 sm:pb-28'
         }`}
         onClick={isFullscreen ? (isRunning ? handlePause : handleStart) : undefined}
-        title={isFullscreen ? (isRunning ? 'Click anywhere to Pause' : 'Click anywhere to Start') : undefined}
+        title={isFullscreen ? (isRunning ? t.clickToPause : t.clickToStart) : undefined}
       >
         <TimerDisplay
           displaySeconds={displaySeconds}
@@ -308,6 +331,8 @@ export default function App() {
           countDirection={countDirection}
           currentPhaseText={getCurrentPhaseText()}
           isRunning={isRunning}
+          t={t}
+          lang={lang}
         />
       </main>
 
@@ -319,8 +344,8 @@ export default function App() {
             handleToggleFullscreen();
           }}
           className="fixed top-5 right-5 z-40 p-2.5 rounded-full ios-glass border border-white/10 text-white/30 hover:text-white hover:border-white/30 hover:bg-white/10 opacity-0 hover:opacity-100 transition-all duration-200"
-          title="Exit Fullscreen (F or Esc)"
-          aria-label="Exit Fullscreen"
+          title={`${t.exitFullscreen} (F or Esc)`}
+          aria-label={t.exitFullscreen}
         >
           <Minimize size={18} />
         </button>
@@ -336,6 +361,7 @@ export default function App() {
           isMuted={isMuted}
           onToggleMute={handleToggleMute}
           onQuickTestSound={handleQuickTestSound}
+          t={t}
         />
       )}
 
@@ -363,6 +389,8 @@ export default function App() {
           onToggleVisualFlash={setVisualFlash}
           displayMode={countDirection}
           onChangeDisplayMode={setCountDirection}
+          t={t}
+          lang={lang}
         />
       )}
 

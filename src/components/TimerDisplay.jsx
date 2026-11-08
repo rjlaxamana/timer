@@ -11,7 +11,9 @@ export default function TimerDisplay({
   bells,
   countDirection,
   currentPhaseText,
-  isRunning
+  isRunning,
+  t,
+  lang
 }) {
   const { theme } = useTheme();
 
@@ -49,11 +51,11 @@ export default function TimerDisplay({
         {isOvertime ? (
           <div className="flex items-center gap-2 px-5 py-2 rounded-full bg-red-950/50 border border-red-500/40 text-[#FF453A] text-xs sm:text-sm font-bold tracking-widest uppercase animate-pulse shadow-[0_0_25px_rgba(255,69,58,0.3)]">
             <AlertCircle size={16} />
-            <span>Overtime: +{fullString}</span>
+            <span>{t.overtime}: +{fullString}</span>
           </div>
         ) : (
           <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-colors border ${theme.badgeClass}`}>
-            <span>{currentPhaseText || (isRunning ? 'In Progress' : 'Ready')}</span>
+            <span>{currentPhaseText || (isRunning ? t.inProgress : t.ready)}</span>
           </div>
         )}
       </div>
@@ -134,7 +136,7 @@ export default function TimerDisplay({
 
                 {/* Marker Tooltip label */}
                 <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap px-2.5 py-1 rounded-lg text-[10px] font-medium bg-black/95 text-white border border-white/20 backdrop-blur">
-                  {bell.name} ({bell.minutes}m)
+                  {(lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name} ({bell.minutes}{lang === 'ja' ? '分' : 'm'})
                 </div>
               </div>
             );

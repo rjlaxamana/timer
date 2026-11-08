@@ -10,6 +10,7 @@ export default function ControlBar({
   isMuted,
   onToggleMute,
   onQuickTestSound,
+  t
 }) {
   const { theme } = useTheme();
 
@@ -21,22 +22,22 @@ export default function ControlBar({
         <button
           onClick={onReset}
           className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-200 ${theme.pillClass} active:scale-90`}
-          title="Reset Timer (R)"
-          aria-label="Reset Timer"
+          title={`${t.reset} (R)`}
+          aria-label={t.reset}
         >
           <RotateCcw size={20} className="opacity-90" />
         </button>
 
-        {/* Primary Start / Pause Pill Button */}
+        {/* Primary Start / Pause Pill Button (Theme-responsive Start) */}
         {isRunning ? (
           <button
             onClick={onPause}
             className="flex items-center justify-center gap-2 px-7 sm:px-9 h-12 sm:h-14 rounded-full bg-[#FF9F0A] hover:bg-[#E08A00] text-black font-semibold text-base sm:text-lg transition-all duration-200 shadow-lg active:scale-95"
-            title="Pause Timer (Space)"
-            aria-label="Pause Timer"
+            title={`${t.pause} (Space)`}
+            aria-label={t.pause}
           >
             <Pause size={22} fill="currentColor" />
-            <span>Pause</span>
+            <span>{t.pause}</span>
           </button>
         ) : (
           <button
@@ -45,11 +46,11 @@ export default function ControlBar({
             style={{
               boxShadow: `0 0 28px ${theme.accentColor}50`,
             }}
-            title="Start Timer (Space)"
-            aria-label="Start Timer"
+            title={`${t.start} (Space)`}
+            aria-label={t.start}
           >
             <Play size={22} fill="currentColor" />
-            <span>Start</span>
+            <span>{t.start}</span>
           </button>
         )}
 
@@ -57,8 +58,8 @@ export default function ControlBar({
         <button
           onClick={onQuickTestSound}
           className={`hidden sm:flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-200 ${theme.pillClass} active:scale-90`}
-          title="Preview Bell Sound"
-          aria-label="Preview Bell Sound"
+          title={t.testSound}
+          aria-label={t.testSound}
         >
           <Bell size={20} className="opacity-90" />
         </button>
@@ -67,8 +68,8 @@ export default function ControlBar({
         <button
           onClick={onToggleMute}
           className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all duration-200 ${theme.pillClass} ${isMuted ? 'text-red-400' : ''} active:scale-90`}
-          title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
-          aria-label={isMuted ? 'Unmute Sound' : 'Mute Sound'}
+          title={isMuted ? t.unmute : t.mute}
+          aria-label={isMuted ? t.unmute : t.mute}
         >
           {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
         </button>
@@ -77,4 +78,3 @@ export default function ControlBar({
     </footer>
   );
 }
-
