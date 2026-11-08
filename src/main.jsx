@@ -2,8 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
-import '@fontsource/jetbrains-mono/700.css'
-import '@fontsource/jetbrains-mono/800.css'
 import './index.css'
 
 class ErrorBoundary extends React.Component {

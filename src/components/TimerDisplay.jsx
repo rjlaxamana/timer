@@ -68,11 +68,11 @@ export default function TimerDisplay({
       {/* Main Massive Digital Readout with Balanced Spacing & Exact Color Match for Colon */}
       <div className="relative flex items-center justify-center w-full my-2 sm:my-3 select-none">
         <div
-          className="flex items-center justify-center font-timer font-bold select-none transition-all duration-300"
+          className="flex items-center justify-center font-sans font-bold tracking-tight select-none transition-all duration-300"
           style={{
             fontSize: 'clamp(6.5rem, 26vw, 23rem)',
-            lineHeight: 0.9,
-            letterSpacing: '0.015em',
+            lineHeight: 0.92,
+            letterSpacing: '-0.025em',
             color: isOvertime ? '#FF453A' : theme.timerColor,
             filter: isOvertime
               ? 'drop-shadow(0 0 25px rgba(255, 69, 58, 0.6)) drop-shadow(0 0 60px rgba(255, 69, 58, 0.3))'
@@ -91,7 +91,7 @@ export default function TimerDisplay({
           <span className="tnum inline-block text-center">{m2}</span>
 
           {/* Colon Separator - 100% opacity matching exact color and glow of digits */}
-          <span className="mx-[0.03em] pb-[0.04em] select-none">
+          <span className="mx-[0.015em] pb-[0.03em] select-none">
             :
           </span>
 

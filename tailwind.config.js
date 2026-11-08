@@ -19,8 +19,14 @@ export default {
           'sans-serif'
         ],
         timer: [
-          '"JetBrains Mono"',
-          'monospace'
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"SF Pro Text"',
+          '"Helvetica Neue"',
+          'Helvetica',
+          'Arial',
+          'sans-serif'
         ]
       },
       colors: {
