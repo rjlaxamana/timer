@@ -41,7 +41,10 @@ export default function ControlBar({
         ) : (
           <button
             onClick={onStart}
-            className="flex items-center justify-center gap-2 px-7 sm:px-9 h-12 sm:h-14 rounded-full bg-[#30D158] hover:bg-[#28B84D] text-black font-semibold text-base sm:text-lg transition-all duration-200 shadow-lg active:scale-95"
+            className={`flex items-center justify-center gap-2 px-7 sm:px-9 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg transition-all duration-200 shadow-lg active:scale-95 ${theme.startButtonClass || theme.accentClass}`}
+            style={{
+              boxShadow: `0 0 28px ${theme.accentColor}50`,
+            }}
             title="Start Timer (Space)"
             aria-label="Start Timer"
           >

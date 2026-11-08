@@ -448,7 +448,10 @@ export default function SettingsModal({
                         {isSelected && (
                           <div
                             className="w-5 h-5 rounded-full flex items-center justify-center shadow-sm"
-                            style={{ backgroundColor: t.accentColor, color: '#000000' }}
+                            style={{
+                              backgroundColor: t.accentColor,
+                              color: (t.id === 'neon-pink' || t.id === 'ios-dark' || t.id === 'ios-light') ? '#ffffff' : '#000000'
+                            }}
                           >
                             <Check size={12} strokeWidth={3} />
                           </div>
