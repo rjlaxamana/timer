@@ -429,9 +429,10 @@ export default function SettingsModal({
                         onClick={() => setThemeId(t.id)}
                         className={`p-3.5 rounded-2xl border transition-all duration-200 flex items-center justify-between text-left ${
                           isSelected
-                            ? 'border-[#0A84FF] bg-current/10 shadow-sm scale-[1.02]'
+                            ? 'bg-current/10 shadow-sm scale-[1.02]'
                             : 'border-current/10 bg-current/5 hover:bg-current/10'
                         }`}
+                        style={{ borderColor: isSelected ? t.accentColor : undefined }}
                       >
                         <div className="flex items-center gap-3">
                           <span
@@ -445,7 +446,10 @@ export default function SettingsModal({
                         </div>
 
                         {isSelected && (
-                          <div className="w-5 h-5 rounded-full bg-[#0A84FF] text-white flex items-center justify-center">
+                          <div
+                            className="w-5 h-5 rounded-full flex items-center justify-center shadow-sm"
+                            style={{ backgroundColor: t.accentColor, color: '#000000' }}
+                          >
                             <Check size={12} strokeWidth={3} />
                           </div>
                         )}
@@ -533,3 +537,4 @@ export default function SettingsModal({
     </div>
   );
 }
+

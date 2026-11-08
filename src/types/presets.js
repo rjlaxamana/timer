@@ -87,3 +87,4 @@ export const STORAGE_KEYS = {
   THEME: 'presentation_timer_theme_v1',
   SETTINGS: 'presentation_timer_settings_v1',
 };
+

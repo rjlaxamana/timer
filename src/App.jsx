@@ -268,9 +268,9 @@ export default function App() {
         <div className="fixed inset-0 z-50 pointer-events-none bg-white animate-flash" />
       )}
 
-      {/* Background Ambient Glow */}
+      {/* Subtle Background Glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[800px] max-h-[800px] rounded-full blur-[140px] opacity-20 pointer-events-none transition-all duration-700"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[700px] max-h-[700px] rounded-full blur-[160px] opacity-10 pointer-events-none transition-all duration-700"
         style={{ backgroundColor: isOvertime ? '#FF453A' : theme.accentColor }}
       />
 
@@ -340,3 +340,4 @@ export default function App() {
     </div>
   );
 }
+

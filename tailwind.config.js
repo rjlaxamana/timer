@@ -19,12 +19,17 @@ export default {
           'sans-serif'
         ],
         mono: [
+          '"JetBrains Mono"',
+          '"Space Mono"',
           '"SF Mono"',
           'Menlo',
           'Monaco',
           'Consolas',
-          '"Liberation Mono"',
-          '"Courier New"',
+          'monospace'
+        ],
+        timer: [
+          '"JetBrains Mono"',
+          '"Space Mono"',
           'monospace'
         ]
       },
@@ -71,3 +76,4 @@ export default {
   },
   plugins: [],
 }
+
