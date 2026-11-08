@@ -80,7 +80,7 @@ export const TRANSLATIONS = {
     presetPomodoro25Desc: '20m check-in, 24m wind-down, 25m break',
 
     // Tab 3: Appearance & Sound
-    colorSchemesHeading: 'Color Schemes (5 Curated)',
+    colorSchemesHeading: 'Color Schemes (4 Curated)',
     darkAndLightModes: 'Dark & Light Modes',
     audioFeedbackHeading: 'Audio & Visual Feedback',
     chimeVolume: 'Chime Volume',
@@ -171,7 +171,7 @@ export const TRANSLATIONS = {
     presetPomodoro25Desc: '20分経過、24分まとめ、25分休憩',
 
     // Tab 3: Appearance & Sound
-    colorSchemesHeading: 'カラーテーマ (厳選5種)',
+    colorSchemesHeading: 'カラーテーマ (厳選4種)',
     darkAndLightModes: 'ダーク・ライトモード',
     audioFeedbackHeading: '音声 & 視覚フィードバック',
     chimeVolume: 'ベル音量',

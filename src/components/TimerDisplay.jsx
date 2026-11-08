@@ -43,6 +43,11 @@ export default function TimerDisplay({
     ? Math.min(100, Math.max(0, (elapsedSeconds / totalDurationSeconds) * 100))
     : 0;
 
+  // Check if any active bell is exactly at the start or end of the track
+  const hasBellAtEnd = bells.some(
+    (b) => b.enabled && b.minutes * 60 + (b.seconds || 0) === totalDurationSeconds
+  );
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center w-full max-w-7xl px-2 sm:px-6 py-2 relative z-10">
       
@@ -60,7 +65,7 @@ export default function TimerDisplay({
         )}
       </div>
 
-      {/* Main Massive Digital Readout with Balanced Spacing */}
+      {/* Main Massive Digital Readout with Balanced Spacing & Exact Color Match for Colon */}
       <div className="relative flex items-center justify-center w-full my-2 sm:my-3 select-none">
         <div
           className="flex items-center justify-center font-timer font-bold select-none transition-all duration-300"
@@ -85,8 +90,8 @@ export default function TimerDisplay({
           <span className="tnum inline-block text-center">{m1}</span>
           <span className="tnum inline-block text-center">{m2}</span>
 
-          {/* Colon Separator - clean and balanced */}
-          <span className="opacity-75 mx-[0.03em] pb-[0.04em] select-none">
+          {/* Colon Separator - 100% opacity matching exact color and glow of digits */}
+          <span className="mx-[0.03em] pb-[0.04em] select-none">
             :
           </span>
 
@@ -96,9 +101,9 @@ export default function TimerDisplay({
         </div>
       </div>
 
-      {/* Progress Timeline with Bell Pins */}
+      {/* Progress Timeline with Bell Pins and Times Directly Aligned Below */}
       <div className="w-full max-w-3xl mt-4 sm:mt-6 px-4">
-        <div className="relative w-full">
+        <div className="relative w-full pb-7">
           {/* Background track */}
           <div className={`h-2 sm:h-2.5 w-full rounded-full overflow-hidden ${theme.progressTrack}`}>
             <div
@@ -109,52 +114,53 @@ export default function TimerDisplay({
             />
           </div>
 
-          {/* Bell Markers pinned on the timeline */}
+          {/* Bell Markers & Times directly aligned under each bell symbol */}
           {bells.map((bell) => {
-            const bellSeconds = bell.minutes * 60 + bell.seconds;
+            const bellSeconds = bell.minutes * 60 + (bell.seconds || 0);
             if (bellSeconds <= 0 || bellSeconds > totalDurationSeconds || !bell.enabled) return null;
             const markerPercent = (bellSeconds / totalDurationSeconds) * 100;
             const hasTriggered = elapsedSeconds >= bellSeconds;
+            const timeString = formatTimeParts(bellSeconds).fullString;
 
             return (
               <div
                 key={bell.id}
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group z-20"
+                className="absolute top-1 -translate-y-1/2 -translate-x-1/2 group z-20 flex flex-col items-center"
                 style={{ left: `${markerPercent}%` }}
               >
-                {/* Marker Dot */}
+                {/* Bell Icon Pin on top of the progress bar */}
                 <div
                   className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center transition-all duration-200 border-2 shadow-sm ${
                     hasTriggered
                       ? 'bg-amber-400 border-white text-black scale-110 shadow-[0_0_12px_#fbbf24]'
                       : 'bg-black/90 border-current/70 text-current group-hover:scale-125'
                   }`}
-                  title={`${bell.name}: ${bell.minutes}m ${bell.seconds ? `${bell.seconds}s` : ''} (${bell.rings} ring${bell.rings > 1 ? 's' : ''})`}
+                  title={`${(lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name}: ${timeString} (${bell.rings} ${bell.rings === 1 ? t.chime : t.chimes})`}
                 >
                   <Bell size={9} className="opacity-95" />
                 </div>
 
-                {/* Marker Tooltip label */}
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap px-2.5 py-1 rounded-lg text-[10px] font-medium bg-black/95 text-white border border-white/20 backdrop-blur">
-                  {(lang === 'ja' && bell.nameJa) ? bell.nameJa : bell.name} ({bell.minutes}{lang === 'ja' ? '分' : 'm'})
+                {/* Time directly under the progress bar aligned with the bell symbol */}
+                <div className="mt-2.5 whitespace-nowrap select-none pointer-events-none">
+                  <span
+                    className={`text-[11px] sm:text-xs font-semibold tracking-tight transition-colors ${
+                      hasTriggered ? 'text-amber-400 font-bold' : 'opacity-70'
+                    }`}
+                  >
+                    {timeString}
+                  </span>
                 </div>
               </div>
             );
           })}
-        </div>
 
-        {/* Milestone Labels below timeline */}
-        <div className="flex justify-between items-center mt-3 text-xs opacity-75 font-medium">
-          <span>00:00</span>
-          <div className="flex gap-4 sm:gap-6">
-            {bells.filter(b => b.enabled).map(b => (
-              <span key={b.id} className="hidden sm:inline-flex items-center gap-1">
-                <Bell size={11} className={elapsedSeconds >= (b.minutes * 60 + b.seconds) ? 'text-amber-400' : 'opacity-60'} />
-                <span>B{b.id}: {String(b.minutes).padStart(2, '0')}:{String(b.seconds || 0).padStart(2, '0')}</span>
-              </span>
-            ))}
+          {/* Track 00:00 at start and total duration at end (if not occupied by a bell) */}
+          <div className="absolute top-4 left-0 right-0 flex justify-between items-center text-[11px] sm:text-xs opacity-50 font-medium select-none pointer-events-none">
+            <span>00:00</span>
+            {!hasBellAtEnd && (
+              <span>{formatTimeParts(totalDurationSeconds).fullString}</span>
+            )}
           </div>
-          <span>{formatTimeParts(totalDurationSeconds).fullString}</span>
         </div>
       </div>
 

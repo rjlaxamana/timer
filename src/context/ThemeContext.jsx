@@ -26,29 +26,6 @@ export const THEMES = [
     badgeClass: 'bg-[#FF2D55]/10 text-[#FF2D55] border-[#FF2D55]/30',
   },
   {
-    id: 'neon-orange',
-    name: 'Warm Orange',
-    type: 'Warm',
-    isDark: true,
-    bgClass: 'bg-[#000000] text-[#FF8A3D]',
-    cardClass: 'bg-[#16100a]/90 border-[#FF8A3D]/25 text-[#FFF4EB]',
-    dockClass: 'bg-[#110b06]/90 border-[#FF8A3D]/30',
-    pillClass: 'bg-[#FF8A3D]/10 hover:bg-[#FF8A3D]/20 text-[#FF8A3D] border border-[#FF8A3D]/20',
-    accentClass: 'bg-[#FF8A3D] text-black font-bold',
-    accentHover: 'hover:bg-[#ff9c57]',
-    accentText: 'text-[#FF8A3D]',
-    accentBorder: 'border-[#FF8A3D]/50',
-    accentColor: '#FF8A3D',
-    timerColor: '#FF8A3D',
-    startButtonClass: 'bg-[#FF8A3D] hover:bg-[#ff9c57] text-black font-bold',
-    glowFilter: 'drop-shadow(0 0 12px rgba(255, 138, 61, 0.22)) drop-shadow(0 0 30px rgba(255, 138, 61, 0.1))',
-    glowClass: 'shadow-[0_0_40px_rgba(255,138,61,0.18)]',
-    progressTrack: 'bg-[#FF8A3D]/15',
-    progressFill: 'bg-[#FF8A3D] shadow-[0_0_10px_#FF8A3D]',
-    overtimeFill: 'bg-[#FF3B30] shadow-[0_0_15px_#FF3B30]',
-    badgeClass: 'bg-[#FF8A3D]/10 text-[#FF8A3D] border-[#FF8A3D]/30',
-  },
-  {
     id: 'neon-cyan',
     name: 'Electric Cyan',
     type: 'Neon',
@@ -124,8 +101,9 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [currentThemeId, setCurrentThemeId] = useState(() => {
     let saved = localStorage.getItem(STORAGE_KEYS.THEME) || 'neon-pink';
-    if (saved === 'neon-mint') saved = 'neon-pink';
-    if (saved === 'neon-amber') saved = 'neon-orange';
+    if (saved === 'neon-mint' || saved === 'neon-amber' || saved === 'neon-orange') {
+      saved = 'neon-pink';
+    }
     return saved;
   });
 
