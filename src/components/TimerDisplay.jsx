@@ -129,16 +129,25 @@ export default function TimerDisplay({
                 className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 group z-20 flex flex-col items-center pointer-events-none"
                 style={{ left: `${markerPercent}%` }}
               >
-                {/* Floating Bell Icon (Above the progress bar) */}
+                {/* Floating Bell Icon (Colored by theme) */}
                 <div
                   className={`pointer-events-auto transition-all duration-300 cursor-pointer ${
                     hasTriggered
-                      ? 'text-amber-400 scale-110 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]'
-                      : 'text-white/60 hover:text-white hover:scale-110'
+                      ? 'scale-110'
+                      : 'opacity-60 hover:opacity-100 hover:scale-110'
                   }`}
+                  style={{
+                    color: theme.accentColor,
+                    filter: hasTriggered
+                      ? `drop-shadow(0 0 10px ${theme.accentColor}) drop-shadow(0 0 20px ${theme.accentColor}60)`
+                      : 'none',
+                  }}
                   title={`${localizedName}: ${timeString} (${bell.rings} ${bell.rings === 1 ? t.chime : t.chimes})`}
                 >
-                  <Bell size={16} className={hasTriggered ? 'fill-amber-400/20' : 'fill-white/10'} />
+                  <Bell
+                    size={16}
+                    fill={hasTriggered ? `${theme.accentColor}40` : `${theme.accentColor}15`}
+                  />
                 </div>
 
                 {/* Vertical spacer across the track line */}
@@ -148,8 +157,11 @@ export default function TimerDisplay({
                 <div className="whitespace-nowrap select-none pointer-events-none">
                   <span
                     className={`text-[11px] sm:text-xs font-semibold tracking-tight transition-colors ${
-                      hasTriggered ? 'text-amber-400 font-bold' : 'opacity-70'
+                      hasTriggered ? 'font-bold' : 'opacity-70'
                     }`}
+                    style={{
+                      color: hasTriggered ? theme.accentColor : undefined,
+                    }}
                   >
                     {timeString}
                   </span>
